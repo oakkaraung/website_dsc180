@@ -7,30 +7,32 @@
 </head>
 <body class="flex flex-col min-h-screen m-0 font-sans">
     <header class="bg-gray-800 text-white text-center p-4 flex justify-between items-center">
-        <button id="toggleSidebar" class="px-4 py-2 text-white">☰</button>
-        <a href="index.html">
+        <a href="index.html" class="flex items-center">
             <img src="images/logo.png" alt="Logo" class="h-12">
+            <span class="ml-3 text-xl font-bold">Sepsis Insight and Management Platform</span>
         </a>
+        <button id="toggleSidebar" class="px-4 py-2 text-white">☰</button>
     </header>
     <div id="dashboard" class="flex-1 relative p-4">
-        <aside id="sidebar" class="bg-gray-100 p-4 w-64 absolute inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out z-10">
+        <aside id="sidebar" class="bg-gray-100 p-4 w-64 absolute inset-y-0 right-0 transform translate-x-full transition-transform duration-300 ease-in-out z-10">
             <nav>
                 <h1 class="">Data Science Capstone Report</h1>
                 <ul>
                     <li><a href="subgroups.html" class="text-blue-600 hover:text-blue-700">Subgroups</a></li>
                     <li><a href="index.html" class="text-blue-600 hover:text-blue-700">Sepsis Risk</a></li>
-                    <li><a href="about.html" class="text-blue-600 hover:text-blue-700">About</a></li>
+                    <li><a href="about_us.html" class="text-blue-600 hover:text-blue-700">About Us</a></li>
                     <li><a href="report.html" class="text-blue-600 hover:text-blue-700">Report</a></li>
                     <!-- More links for other visualizations -->
                 </ul>
             </nav>
         </aside>
         <section id="main-content" class="flex-1 p-4 flex flex-col">
+            <div class="w-full md:w-3/4 lg:w-1/2"></div>
             <h1 class="text-5xl text-center font-bold">Sepsis Risk Medical Dashboard: </h1>
             <h2 class="text-5xl text-center font m-1">Utilizing Comorbidity Subgroups For Enhanced ICU Patient Care</h1>
+            <h1 class="text-3xl text-left font-bold">Abstract</h1> <br>
             <div id="info-container-left-1" class="bg-white p-4 h-50 border border-gray-300 rounded-lg mb-4">
-                <br>
-                <p> <h1 class="text-3xl text-left font-bold">Abstract</h1> <br>
+                <p>
                     The lack of incorporation of medical history in current sepsis 
                     risk prediction tools leaves a gap in the reality of sepsis 
                     development and the ability of a machine learning model to 
@@ -45,9 +47,9 @@
                     to facilitate sepsis risk assessment for medical professionals.
                     </p>
             </div>
+            <h1 class="text-3xl text-left font-bold">Introduction</h1> <br>
             <div id="info-container-left-2" class="bg-white p-4 h-65 border border-gray-300 rounded-lg mb-4">
-                <br>
-                <p> <h1 class="text-1xl text-left font-bold">Introduction</h1> <br>
+                <p>
                 Prevalent problems in healthcare like sepsis and a progressively aging 
                 population necessitates a data-driven approach for these increasingly complex problems. 
                 Contemporary medical diagnoses utilize risk assessment scoring systems, such as the 
@@ -61,8 +63,6 @@
                 critical care dataset, arguing that a more nuanced understanding of multimorbidity could shift the thinking 
                 in healthcare from a single-disease focus to a multimorbidity focused healthcare model.
                     </p>
-            </div>
-            <div id="info-container-right-1" class="bg-white p-4 h-50 border border-gray-300 rounded-lg mb-4">
                 <br>
                 <p> <h1 class="text-1xl text-left font-bold">Literature Review and Discussion of Previous Work</h1> <br>
                     For the Quarter 1 project, we replicated the research paper, Multimorbidity states associated with 
@@ -151,6 +151,7 @@
 
                          </p>
             </div>
+            </div>
         </section>
     </div>
     <footer class="bg-gray-800 text-white text-center p-4">
@@ -159,7 +160,7 @@
     <script>
         document.getElementById('toggleSidebar').addEventListener('click', function() {
             var sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
+            sidebar.classList.toggle('translate-x-full');
             sidebar.classList.toggle('translate-x-0');
         });
     </script>

@@ -4,21 +4,23 @@
     <title>Dashboard with Visualizations</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
 </head>
 <body class="flex flex-col min-h-screen m-0 font-sans">
     <header class="bg-gray-800 text-white text-center p-4 flex justify-between items-center">
-        <button id="toggleSidebar" class="px-4 py-2 text-white">☰</button>
-        <a href="index.html">
-            <img src="images/logo.png" alt="Logo" class="h-12"> <!-- Adjust the path and class as needed -->
+        <a href="index.html" class="flex items-center"> <!-- Use flex and items-center to align items horizontally -->
+            <img src="images/logo.png" alt="Logo" class="h-12"> <!-- Your logo image -->
+            <span class="ml-3 text-xl font-bold">Sepsis Insight and Management Platform</span> <!-- Your logo text right next to the image -->
         </a>
+        <button id="toggleSidebar" class="px-4 py-2 text-white">☰</button>
     </header>
     <div id="dashboard" class="flex flex-1 relative">
-        <aside id="sidebar" class="bg-gray-100 p-4 w-64 absolute inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out z-10">
+        <aside id="sidebar" class="bg-gray-100 p-4 w-64 absolute inset-y-0 right-0 transform translate-x-full transition-transform duration-300 ease-in-out z-10">
             <nav>
                 <ul>
                     <li><a href="subgroups.html" class="text-blue-600 hover:text-blue-700">Subgroups</a></li>
                     <li><a href="index.html" class="text-blue-600 hover:text-blue-700">Sepsis Risk</a></li>
-                    <li><a href="about.html" class="text-blue-600 hover:text-blue-700">About</a></li>
+                    <li><a href="about_us.html" class="text-blue-600 hover:text-blue-700">About Us</a></li>
                     <li><a href="report.html" class="text-blue-600 hover:text-blue-700">Report</a></li>
                     <!-- More links for other visualizations -->
                 </ul>
@@ -29,53 +31,50 @@
                 <!-- Left side -->
                 <div class="grid grid-cols-2 grid-rows-3 gap-4">
                     <div class="bg-white p-4 border border-gray-300 rounded-lg">
-                        <h2 class="text-lg font-semibold mb-4 text-center">Patient Information</h2>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div><strong>ID:</strong> 123456</div>
-                            <div><strong>Age:</strong> 45</div>
-                            <div><strong>Gender:</strong> Male</div>
-                            <div><strong>Admission Type:</strong> Elective</div>
+                        <h2 class="text-xl font-semibold mb-4 text-center">Patient Information</h2>
+                        <div class="bg-blue-100 grid rounded-lg grid-cols-2 gap-4 mb-4 p-4">
+                            <div id="subject_id_display"></div> <!-- Subject ID -->
+                            <!-- <div id="subject_name_display"></div> Subject Name -->
+                            <div id="subject_age_display"></div> <!-- Subject Age -->
+                            <!-- <div><strong>Gender:</strong> None</div> -->
                         </div>
-                        <h3 class="text-md font-semibold mb-2 text-center">Most Recent J.I.T Information</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><strong>Heart Rate:</strong> 75 bpm</div>
-                            <div><strong>Temperature:</strong> 98.6°F</div>
-                            <div><strong>Respiratory Rate:</strong> 18 bpm</div>
-                            <div><strong>White Blood Cell Count:</strong> 7000 cells/μL</div>
+                        <p id="jit_time" class="mb-4 text-center">Just In Time Information</p>
+                        <div class="bg-blue-100 grid rounded-lg grid-cols-2 gap-4 p-4">
+                            <div id="hr_display"></div>
+                            <div id="temp_display"></div>
+                            <div id="rr_display"></div>
+                            <div id="bp_display"></div>
+                            <div id="spo2_display"></div>
+                            <div id="sofa_display"></div>
                         </div>
                     </div>
-                    <div class="bg-white p-4 border border-gray-300 rounded-lg">
-                        <h2 class="text-lg font-semibold mb-4 text-center">Elixhauser Comorbidity Categories</h2>
-                        <ul class="list-disc pl-5">
-                            <li class="mb-2">Congestive Heart Failure</li>
-                            <li class="mb-2">Valvular Disease</li>
-                            <li class="mb-2">Renal Failure</li>
-                            <li class="mb-2">Complicated Diabetes</li>
-                        </ul>
+                    <div id="elixhauser" class="bg-white p-4 border border-gray-300 rounded-lg">
+                        <tableau-viz id="tableauViz" src='https://public.tableau.com/views/SepsisDashboardTableauWork/Dashboard1?:language=en-US&publish=yes&:sid=&:display_count=n&:origin=viz_share_link'>
+                        </tableau-viz>
                     </div>
-                    <div class="bg-white p-4 border border-gray-300 rounded-lg">
-                        Quadrant 1
-                    </div>
-                    <div class="bg-white p-4 border border-gray-300 rounded-lg">
-                        Quadrant 2
-                    </div>
-                    <div class="bg-white p-4 border border-gray-300 rounded-lg">
-                        Quadrant 3
-                    </div>
-                    <div class="bg-white p-4 border border-gray-300 rounded-lg">
-                        Quadrant 4
+                    <div class="bg-white p-4 border border-gray-300 rounded-lg col-span-2 row-span-2">
+                        <select id="visualSelector">
+                            <option value="visual1">Procedure History</option>
+                            <option value="visual2">Vitals Timeline</option>
+                            <!-- Add more options for additional visuals -->
+                        </select>
+                        <div id="visContainer"></div>
+                        <!-- <div id="d3VisualContainer"></div> Container for Visuals -->
                     </div>
                 </div>
+                
                 <!-- Right side -->
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-white p-4 border border-gray-300 rounded-lg">
-                        <h2 class="text-lg font-semibold mb-4 text-center">Patient Group Analysis</h2>
-                        <div class="text-center p-4 my-4 bg-blue-100 rounded-lg">
+                        <h2 class="text-xl font-semibold mb-4 text-center">Patient Group Analysis</h2>
+                        <div class="text-center p-9 my-4 bg-blue-100 rounded-lg">
                             <h3 class="text-xl font-bold">Cardiopulmonary Group</h3>
                             <p class="text-green-600">Likelihood: <span class="font-bold">83%</span></p>
                         </div>
-                        <p class="text-sm text-gray-600 italic">Our automated analysis is 83% confident this patient belongs in the Cardiopulmonary subgroup. This is taken into account for our sepsis risk analysis.</p>
-
+                        <p class="text-sm text-gray-600 italic mb-4">Our automated analysis is 83% confident this patient belongs in the Cardiopulmonary subgroup. This is taken into account for our sepsis risk analysis.</p>
+                        <h2 class="text-xl font-semibold mb-4 text-center">Elixhauser Comorbidity Categories</h2>
+                        <ul id="comorbidity" class="list-disc pl-5">
+                        </ul>
                         <!-- Disease selection dropdown -->
                         <div class="text-center mb-4">
                             <label for="disease-select" class="block mb-2 text-sm font-medium text-gray-900">Select a Disease:</label>
@@ -118,15 +117,16 @@
                             Select a disease to see its description.
                         </div>
                         <!-- JavaScript file for R function (02_logistic_regression.R) -->
-                        <script src="scripts/sub1_comorbidity_logistic.js"></script> <!-- Link to your JavaScript file -->
+                        <script src="scripts/sub1_comorbidity_logistic.js"></script>
                     </div>
                     <div class="bg-white p-4 border border-gray-300 rounded-lg">
-                        <h2 class="text-lg font-semibold mb-4 text-center">Sepsis Risk Alert</h2>
-                        <div class="text-center p-4 my-4 bg-yellow-100 border-l-4 border-yellow-500 rounded-lg">
-                            <h3 class="text-xl font-bold text-yellow-600">Yellow Flag - Medium Risk</h3>
-                            <p class="mb-4">This patient has been identified as at medium risk for developing sepsis.</p>
-                        </div>
-                        <p class="text-sm text-gray-600 italic">Next steps: [INSERT NEXT STEPS HERE]</p>
+                        <h2 class="text-xl font-semibold mb-4 text-center">Sepsis Risk Alert</h2>
+                        <!-- The div for displaying the risk level -->
+                        <div id="risk_banner" class="text-center font-medium"></div>
+                        <!-- The paragraph for next steps with a span to insert text dynamically -->
+                        <p class="text-sm text-gray-600 italic"><span id="nextSteps"></span></p>
+                        <!-- JavaScript file to update the content based on the model's output -->
+                        <!-- <script src="scripts/flag_red.js"></script> -->
                     </div>
                 </div>
             </div>
@@ -139,8 +139,8 @@
     <script>
         document.getElementById('toggleSidebar').addEventListener('click', function() {
             var sidebar = document.getElementById('sidebar');
-            // Toggle between -translate-x-full and translate-x-0 to show/hide the sidebar
-            sidebar.classList.toggle('-translate-x-full');
+            // Toggle between translate-x-full and translate-x-0 to show/hide the sidebar
+            sidebar.classList.toggle('translate-x-full');
             sidebar.classList.toggle('translate-x-0');
         });
 
@@ -155,6 +155,203 @@
             const infoContainer = document.getElementById('subgroup-name');
             infoContainer.textContent = `${subgroupName}:`
         }
+        // Function to parse URL parameters
+        function getQueryParam(param) {
+            var queryString = window.location.search.substring(1); // Get query string, excluding '?'
+            var queryParams = queryString.split('&'); // Split into key-value pairs
+            for (var i = 0; i < queryParams.length; i++) {
+                var pair = queryParams[i].split('='); // Split key-value pair
+                if (decodeURIComponent(pair[0]) == param) { // Check if the current key matches the parameter we want
+                    return decodeURIComponent(pair[1]); // Return the value
+                }
+            }
+            return null; // If the parameter isn't found, return null
+        }
+
+        // Extract userId from URL parameters
+        var userId = getQueryParam('subject_id');
+
+        // Extract color from URL parameters
+        var riskColor = getQueryParam('risk_color');
+
+        // Select the p tag by its id and set its content to the userId
+        if (userId) {
+            document.getElementById('subject_id_display').innerHTML = `<strong>ID:</strong> ${userId}`;
+        } else {
+            document.getElementById('subject_id_display').innerHTML = `<strong>ID:</strong> 0000`;
+        }
+
+
+        function updateNextStepsForLowRisk() {
+            // Targeting the span by its ID
+            const nextStepsElement = document.getElementById('nextSteps');
+
+            // Define the instructions for low risk next steps, incorporating machine learning model details
+            const lowRiskSteps = "According to our Random Forest Classifier-based machine learning algorithm, this patient has been classified as having a low (green flag) risk of developing sepsis. This classification is based on an analysis of the patient's vital signs (temperature, blood pressure, heart rate, oxygen level, respiratory rate) and existing comorbidities, along with factors such as number of readmissions, hours in the hospital per admission, and age. The predicted SOFA score range for this category is between 7 and 10, inclusive. <br><br> The patient currently appears to be stable, but continuous observation is recommended. Please ensure regular monitoring of vital signs and reassess the patient's condition periodically to detect any unforeseen changes or deterioration.";
+
+            // Updating the innerHTML of the targeted element with the low risk steps
+            nextStepsElement.innerHTML = lowRiskSteps;
+        }
+
+        function updateNextStepsForHighRisk() {
+            // Targeting the span by its ID
+            const nextStepsElement = document.getElementById('nextSteps');
+
+            // Define the instructions for high risk next steps, incorporating machine learning model details
+            const highRiskSteps = "According to our Random Forest Classifier-based machine learning algorithm, this patient has been classified as having a high (red flag) risk of developing sepsis. This classification is based on an analysis of the patient's vital signs (temperature, blood pressure, heart rate, oxygen level, respiratory rate) and existing comorbidities, along with factors such as number of readmissions, hours in the hospital per admission, and age. The predicted SOFA score range for this category is between 12 and 24, inclusive. <br><br> Immediate and consistent attention is required. Please initiate emergency procedures, conduct a comprehensive review of the patient's medical records, and prepare for potential intensive care intervention. This condition demands prompt action to prevent critical outcomes.";
+
+            // Updating the innerHTML of the targeted element with the high risk steps
+            nextStepsElement.innerHTML = highRiskSteps;
+        }
+
+        function updateNextStepsForMediumRisk() {
+            // Targeting the span by its ID
+            const nextStepsElement = document.getElementById('nextSteps');
+
+            // Define the instructions for medium risk next steps, incorporating machine learning model details
+            const mediumRiskSteps = "According to our Random Forest Classifier-based machine learning algorithm, this patient has been classified as having a medium (yellow flag) risk of developing sepsis. This classification is based on an analysis of the patient's vital signs (temperature, blood pressure, heart rate, oxygen level, respiratory rate) and existing comorbidities, along with other factors such as number of readmissions, hours in the hospital per admission, and age. The predicted SOFA score range for this category is between 4 and 6, inclusive. <br><br> Please conduct a thorough review of the patient's medical history, including comorbidity conditions and current vital sign metrics, to mitigate the risk of sepsis onset. Regular monitoring and potential intervention may be required. It is important to note that our model's accuracy ranges from 60 to 70% per subgroup, which underscores the need for clinical judgment in conjunction with the algorithm's predictions.";
+
+            // Updating the innerHTML of the targeted element with the medium risk steps
+            nextStepsElement.innerHTML = mediumRiskSteps;
+        }
+
+        // Set the background color of the body based on the risk color
+        if (riskColor === 'green') {
+            document.getElementById('risk_banner').innerHTML = `<div id="risk_banner" class="text-center p-4 my-4 bg-green-100 border-l-4 border-green-500 rounded-lg">
+                            <h3 class="text-xl font-bold text-green-600">Green Flag - Low Risk</h3>
+                            <p class="mb-4">This patient has been identified as at low risk for developing sepsis.</p>
+                        </div>`;
+            updateNextStepsForLowRisk();
+        }
+        else if (riskColor === 'yellow') {
+            document.getElementById('risk_banner').innerHTML = `<div id="risk_banner" class="text-center p-4 my-4 bg-yellow-100 border-l-4 border-yellow-500 rounded-lg">
+                            <h3 class="text-xl font-bold text-yellow-600">Yellow Flag - Medium Risk</h3>
+                            <p class="mb-4">This patient has been identified as at Medium risk for developing sepsis.</p>
+                        </div>`;
+            updateNextStepsForMediumRisk();
+        }
+        else if (riskColor === 'red') {
+            document.getElementById('risk_banner').innerHTML = `<div id="risk_banner" class="text-center p-4 my-4 bg-red-100 border-l-4 border-red-500 rounded-lg">
+                            <h3 class="text-xl font-bold text-red-600">Red Flag - Severe Risk</h3>
+                            <p class="mb-4">This patient has been identified as at severe risk for developing sepsis.</p>
+                        </div>`;
+            updateNextStepsForHighRisk();
+        }
+        else {
+            document.getElementById('risk_banner').innerHTML = `<div id="risk_banner" class="text-center p-4 my-4 bg-blue-100 border-l-4 border-blue-500 rounded-lg">
+                            <h3 class="text-xl font-bold text-blue-600">No Flag Yet</h3>
+                            <p class="mb-4">This patient has yet to be identified at a risk level. Please come back soon.</p>
+                        </div>`;
+        }
+        function fetchAndDisplayData(fileName) {
+            fetch(`processed_data/id${fileName}.json`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('subject_age_display').innerHTML = `<strong>Age:</strong> ${data.age}`;
+                    // document.getElementById('subject_name_display').innerHTML = `<strong>Name:</strong> ${data.name}`;
+                    document.getElementById('jit_time').innerHTML = `<strong>Just In Time:</strong> ${data.latest_chart_time}`;
+                    document.getElementById('hr_display').innerHTML = `<strong>Heart Rate:</strong> ${data.latest_heart_rate} bpm`;
+                    document.getElementById('temp_display').innerHTML = `<strong>Temperature:</strong> ${data.latest_temp_F} F`;
+                    document.getElementById('rr_display').innerHTML = `<strong>Respiratory Rate:</strong> ${data.latest_respiratory_rate} bpm`;
+                    document.getElementById('bp_display').innerHTML = `<strong>Blood Pressure:</strong> ${data.latest_blood_pressure} mmHg`;
+                    document.getElementById('spo2_display').innerHTML = `<strong>Blood Oxygen:</strong> ${data.spo2}%`;
+                    document.getElementById('sofa_display').innerHTML = `<strong>SOFA Score:</strong> ${data.sofa}`;
+
+                    const listElement = document.querySelector('#comorbidity');
+                    listElement.innerHTML = '';  // Clear existing list items
+                    data.elixhauser.forEach(category => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = category;
+                        listItem.classList.add('mb-2');
+                        listElement.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+
+        // Fetch and display the data if the parameter is provided
+        if (userId) {
+            fetchAndDisplayData(userId);
+        } else {
+            console.log('No data file specified.');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var visualSelector = document.getElementById('visualSelector');
+            var visualContainer = document.getElementById('visContainer');
+            visualContainer.innerHTML = `<tableau-viz id="tableauViz" src='https://public.tableau.com/views/ProcedureTimeline/Dashboard1?:language=en-US&publish=yes&:sid=&:display_count=n&:origin=viz_share_link'>
+                        </tableau-viz>`;
+
+            visualSelector.addEventListener('change', function() {
+                if (this.value === 'visual1') {
+                    visualContainer.innerHTML = `<tableau-viz id="tableauViz" src='https://public.tableau.com/views/ProcedureTimeline/Dashboard1?:language=en-US&publish=yes&:sid=&:display_count=n&:origin=viz_share_link'>
+                        </tableau-viz>`;
+                } else if (this.value === 'visual2') {
+                    visualContainer.innerHTML = `<tableau-viz id="tableauViz" src='https://public.tableau.com/views/SepsisDashboardPatientVitals/Sheet2?:language=en-US&publish=yes&:sid=&:display_count=n&:origin=viz_share_link'>
+                        </tableau-viz>`;
+                }
+            });
+        });
+
+
+
+        // // Function to draw Visual 1
+        // function drawVisual1() {
+        //     const svg = d3.select('#d3VisualContainer').append('svg')
+        //         .attr('width', 200)
+        //         .attr('height', 200);
+
+        //     svg.append('circle')
+        //         .attr('cx', 100)
+        //         .attr('cy', 100)
+        //         .attr('r', 50)
+        //         .attr('fill', 'red');
+        // }
+
+        // // Function to draw Visual 2
+        // function drawVisual2() {
+        //     const svg = d3.select('#d3VisualContainer').append('svg')
+        //         .attr('width', 200)
+        //         .attr('height', 200);
+
+        //     svg.append('rect')
+        //         .attr('x', 50)
+        //         .attr('y', 50)
+        //         .attr('width', 100)
+        //         .attr('height', 100)
+        //         .attr('fill', 'blue');
+        // }
+
+        // // Function to update the visual based on the dropdown selection
+        // function updateVisual(selectedVisual) {
+        //     // Clear the previous visual
+        //     d3.select('#d3VisualContainer').selectAll('*').remove();
+
+        //     // Draw the selected visual
+        //     if (selectedVisual === 'visual1') {
+        //         drawVisual1();
+        //     } else if (selectedVisual === 'visual2') {
+        //         drawVisual2();
+        //     }
+        //     // Add more conditions for additional visuals
+        // }
+
+        // // Event listener for the dropdown
+        // document.getElementById('visualSelector').addEventListener('change', function() {
+        //     updateVisual(this.value);
+        // });
+
+        // // Initial visual setup
+        // updateVisual('visual1'); // Default to showing the first visual
+
     </script>
 </body>
 </html>

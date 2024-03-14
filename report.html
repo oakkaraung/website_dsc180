@@ -9,23 +9,17 @@
     <header class="bg-gray-800 text-white text-center p-4 flex justify-between items-center">
         <a href="index.html" class="flex items-center">
             <img src="images/logo.png" alt="Logo" class="h-12">
-            <span class="ml-3 text-xl font-bold">Sepsis Insight and Management Platform</span>
+            <span class="ml-3 text-xl font-bold">Sepsis Insight and Management Platform (SIMPL)</span>
         </a>
-        <button id="toggleSidebar" class="px-4 py-2 text-white">☰</button>
+        <nav class="flex items-center">
+            <ul class="list-none flex space-x-4">
+                <li><a href="index.html" class="text-white hover:text-gray-300">Sepsis Risk</a></li>
+                <li><a href="about_us.html" class="text-white hover:text-gray-300">About Us</a></li>
+                <li><a href="report.html" class="text-white hover:text-gray-300">Report</a></li>
+            </ul>
+        </nav>
     </header>
     <div id="dashboard" class="flex-1 relative p-4">
-        <aside id="sidebar" class="bg-gray-100 p-4 w-64 absolute inset-y-0 right-0 transform translate-x-full transition-transform duration-300 ease-in-out z-10">
-            <nav>
-                <h1 class="">Data Science Capstone Report</h1>
-                <ul>
-                    <li><a href="subgroups.html" class="text-blue-600 hover:text-blue-700">Subgroups</a></li>
-                    <li><a href="index.html" class="text-blue-600 hover:text-blue-700">Sepsis Risk</a></li>
-                    <li><a href="about_us.html" class="text-blue-600 hover:text-blue-700">About Us</a></li>
-                    <li><a href="report.html" class="text-blue-600 hover:text-blue-700">Report</a></li>
-                    <!-- More links for other visualizations -->
-                </ul>
-            </nav>
-        </aside>
         <section id="main-content" class="flex-1 p-4 flex flex-col">
             <div class="w-full md:w-3/4 lg:w-1/2"></div>
             <h1 class="text-5xl text-center font-bold">Sepsis Risk Medical Dashboard: </h1>
@@ -33,18 +27,13 @@
             <h1 class="text-3xl text-left font-bold">Abstract</h1> <br>
             <div id="info-container-left-1" class="bg-white p-4 h-50 border border-gray-300 rounded-lg mb-4">
                 <p>
-                    The lack of incorporation of medical history in current sepsis 
-                    risk prediction tools leaves a gap in the reality of sepsis 
-                    development and the ability of a machine learning model to 
-                    mimic this process. Inspired by the finding of Zador et al. (2019), 
-                    which challenges the current diagnostic system by emphasizing the 
-                    significance of interplay between pre-existing diseases in a 
-                    patient’s sepsis development, we decided to create a comprehensive 
-                    sepsis risk assessment dashboard that unlike other prediction tools 
-                    capitalizes on our new insights relating to comorbidity. Our dashboard 
-                    aims to categorize ICU patients into risk categories based on comorbidity 
-                    specific vitals and convey this categorization with relevant JIT information 
-                    to facilitate sepsis risk assessment for medical professionals.
+                    Leveraging insights from Zador et al. (2019) on the interplay between pre-existing diseases 
+                    and sepsis development, we've developed a comprehensive sepsis risk assessment dashboard 
+                    that categorizes ICU patients into risk groups based on comorbidity-specific vitals. Our 
+                    approach diverges from traditional diagnostics by using Latent Class Analysis to classify 
+                    patients into seven distinct subgroups, highlighting the complex interrelations of coexisting 
+                    conditions. This classification informs the creation of seven tailored machine learning models, 
+                    enabling precise sepsis risk predictions displayed on a user-friendly dashboard for medical professionals.
                     </p>
             </div>
             <h1 class="text-3xl text-left font-bold">Introduction</h1> <br>
@@ -157,12 +146,5 @@
     <footer class="bg-gray-800 text-white text-center p-4">
         DSC 180B
     </footer>
-    <script>
-        document.getElementById('toggleSidebar').addEventListener('click', function() {
-            var sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('translate-x-full');
-            sidebar.classList.toggle('translate-x-0');
-        });
-    </script>
 </body>
 </html>
